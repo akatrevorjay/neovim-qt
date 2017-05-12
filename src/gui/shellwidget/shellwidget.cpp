@@ -53,7 +53,7 @@ bool ShellWidget::setShellFont(const QString& family, int ptSize, int weight, bo
 	if ( !force ) {
 		if ( !fi.fixedPitch() ) {
 			emit fontError(QString("%1 is not a fixed pitch font").arg(f.family()));
-			return false;
+			//return false;
 		}
 
 		if (isBadMonospace(f)) {
