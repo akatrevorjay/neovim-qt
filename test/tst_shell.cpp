@@ -115,9 +115,9 @@ protected:
 	void checkCommand(NeovimConnector *c, const QString& cmd,
 			bool output=false) {
 		auto req = c->neovimObject()->vim_command_output(c->encode(cmd));
-		QSignalSpy cmdOk(req, SIGNAL(finished(quint32, Function::FunctionId, QVariant)));
+		QSignalSpy cmdOk(req, SIGNAL(finished(quint32, quint64, QVariant)));
 		QVERIFY(cmdOk.isValid());
-		QObject::connect(c->neovimObject(), &Neovim::err_vim_command_output, [cmd](QString msg, const QVariant& err) {
+		QObject::connect(c->neovimObject(), &NeovimApi1::err_vim_command_output, [cmd](QString msg, const QVariant& err) {
 				qDebug() << cmd << msg;
 			});
 		qDebug() << cmd;
@@ -134,8 +134,8 @@ protected:
 
 	/// Check for the presence of the GUI variables in Neovim
 	void checkStartVars(NeovimQt::NeovimConnector *conn) {
-		NeovimQt::Neovim *nvim = conn->neovimObject();
-		connect(nvim, &NeovimQt::Neovim::err_vim_get_var,
+		auto *nvim = conn->api1();
+		connect(nvim, &NeovimQt::NeovimApi1::err_vim_get_var,
 			[](const QString& err, const QVariant& v) {
 				qDebug() << err<< v;
 			});
